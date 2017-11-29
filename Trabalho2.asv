@@ -1,3 +1,6 @@
+clear
+
+
 [y,Fs] = audioread('ss.wav');
 fn = 11025;                         %Vamos fazer um downsampling de 11025Hz
 [P,Q] = rat(fn/Fs);
@@ -19,11 +22,11 @@ e = y_r - est_y;
 a_yk = aryule(acs,p);                        %talvez sejam já os coeficientes a??
 
 
-tamanho = 8000;
+tamanho = length(y_r);
 
-u = wgn(tamanho,1,0);                           %ruido branco U(n) tamanho 1000
+u = wgn(tamanho,2,20);                           %ruido branco U(n) tamanho 1000
 
-x = wgn(tamanho,1,0);                           %gerar o X(n)
+x = wgn(tamanho,2,0.1);                           %gerar o X(n)
 
 for n = 13:tamanho
     for k = 1:p
@@ -32,9 +35,10 @@ for n = 13:tamanho
 end
 
 figure;
+subplot(2,1,1);
 plot(x);
-figure;
-plot(u);
+subplot(2,1,2);
+plot(y);
 
 
 
@@ -47,8 +51,9 @@ hold off;
 title 'Original Signal vs. LPC Estimate';
 
 
-Periodogram(
+Periodogram(y_r,p);
 
+Periodogram(x,p);
 
 figure;
 subplot(2,1,1);

@@ -12,46 +12,33 @@ y_r = y_r(sample:sample+441,:);    % Utilizar uma amostra de 40ms do sinal que s
 
 p=12; % Ordem
 
-[Ac,E] = lpc(y_r,p);
-
-est_y = filter([0 -Ac(2:end)],1,y_r);
-e = y_r - est_y;
-[acs,lags] = xcorr(e,'coeff');
+tamanho = length(y_r);
 
 
-a_yk = aryule(acs,p);                        %talvez sejam já os coeficientes a??
+[a,varu] = Periodogram(y_r,p);
 
 
-tamanho = 8000;
+u = normrnd(0,sqrt(varu),tamanho,2);                       %ruido branco u(n) e variância varu
 
-u = wgn(tamanho,1,0);                           %ruido branco U(n) tamanho 1000
+x = filter(1,[1 -a'],u,[]);                                %gerar o x(n)
 
-x = wgn(tamanho,1,0);                           %gerar o X(n)
 
-for n = 13:tamanho
-    for k = 1:p
-        x(n) = a_yk(k)*x(n-k) + u(n);
-    end
-end
+                                      
+% for n = p+1:tamanho                             %Sem o somatório fica
+%                                                 bem mais parecido...
+%     for k = 1:p
+%         x(n) = a(k)*x(n-k)  + u(n) ;
+%     end
+% end
+
 
 figure;
 subplot(2,1,1);
 plot(x);
 subplot(2,1,2);
-plot(y);
+plot(y_r);
 
 
-
-figure;
-hold on;
-h1 = plot([1:length(y_r)],y_r,[1:length(y_r)],est_y);
-xlabel 'Sample number', ylabel 'Amplitude';
-legend({'Original signal','LPC estimate'});
-hold off;
-title 'Original Signal vs. LPC Estimate';
-
-
-Periodogram(y_r,p);
 
 Periodogram(x,p);
 
