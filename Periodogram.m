@@ -1,4 +1,4 @@
-function [a,varu] = Periodogram( signal ,p )
+function [a,varu] = Periodogram( signal ,p ,nome)
 
 N = length(signal);
 Nfft = 1024;
@@ -22,8 +22,13 @@ varu = rX(1) -a'*r;
 den=abs(fftshift(fft([1;-a],Nfft))).^2;
 P_AR = varu./den;
 
-figure;
+
+
+figure('Name','Peridiograma');
 plot(freq,10*log(P_per),'color','b');
+title(sprintf('Peridiograma de %s',nome));
+xlabel('f');
+ylabel('10logPx(f)');
 hold on;
 plot(freq,10*log(P_AR),'LineWidth',3,'color','g');
 
