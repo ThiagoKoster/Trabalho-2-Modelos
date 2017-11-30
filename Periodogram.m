@@ -24,9 +24,9 @@ P_AR = varu./den;
 
 
 
-figure('Name','Peridiograma');
+figure('Name','Periodograma');
 plot(freq,10*log(P_per),'color','b');
-title(sprintf('Peridiograma de %s',nome));
+title(sprintf('Periodograma de %s',nome));
 xlabel('f');
 ylabel('10logPx(f)');
 hold on;
